@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z01 Profile</title>
+    <script type="module" src="main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav><span>Hello <span id="displayof_FirstName"></span><span id="displayof_LastName"></span></span><button id="logout">logout</button></nav>
+
+    <div>
+        <h2 class="audits-title">Audit Statistics</h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Audit Ratio</td>
+                    <td id="displayof_audit_ratio">1.3</td>
+                </tr>
+                <tr>
+                    <td>Total Audits</td>
+                    <td id="displayof_audit_total">68</td>
+                </tr>
+                <tr>
+                    <td>Success Rate</td>
+                    <td id="displayof_audit_successRate" style="color:green;">0 %</td>
+                </tr>
+                <tr>
+                    <td>Fail Rate</td>
+                    <td id="displayof_audit_failRate" style="color:red;">0 %</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>Current Level</h2>
+        <h3 id="displayof_level" class="circle">0</h3>
+    </div>
+    <div id="last_transactions_info">
+        <h2>Last three transactions</h2>
+        <table>
+            <tbody>                
+                <tr>
+                    <td><span class="name">make-your-game</span></td>
+                    <td><span class="amount">147 KB</span></td>
+                    <td><span class="date">1/29/2025</span></td>
+                </tr>                
+                <tr>
+                    <td><span class="name">push-swap</span></td>
+                    <td><span class="amount">18.375 KB</span></td>
+                    <td><span class="date">1/13/2025</span></td>
+                </tr>                
+                <tr>
+                    <td><span class="name">forum</span></td>
+                    <td><span class="amount">76.25 KB</span></td>
+                    <td><span class="date">1/6/2025</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
