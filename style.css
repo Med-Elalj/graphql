@@ -62,3 +62,29 @@ tr:last-child {
 .circle {
     border-radius: 100%;
 }
+
+#displayof_login {
+    background-image: radial-gradient(circle, #000 3%, #0000 100%), repeating-conic-gradient(#0f0 0deg 10deg, #00f 10deg 20deg);
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    position: 0 0;
+    top: 0;
+    left: 0;
+}
+#displayof_login div {
+    display: flex;
+    height: fit-content;
+    align-self: center;
+    margin-bottom: 0;
+    align-content: center;
+}
+
+h2 {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to right, transparent, violet, transparent) 1;
+}

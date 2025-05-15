@@ -1,29 +1,156 @@
 
 const GRAPHQL_URL = 'https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql'
 
-export const fetchGraphQL = async (query, variables) => {
-    const response = await fetch(GRAPHQL_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          query: query,
-            variables: variables,
-        }),
-    });
+async function fetchGraphQL(query, variables) {
+  const response = await fetch(GRAPHQL_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify({
+      query: query,
+      variables: variables,
+    }),
+  });
 
-    return response.json();
+  return await response.json();
+}
+
+const handleError = (error) => {
+    if (typeof error.message === "string" && error.message.includes('JWTExpired')) {
+      localStorage.removeItem("token");
+      displayof_login.toggle();
+    }
+    console.error(error);
+  };
+
+const fetchData = async (query, variables) => {
+  try {
+    const response = await fetchGraphQL(query, variables);
+    if (Array.isArray(response.errors)) {
+      throw new Error(response.errors[0].message);
+    }
+    return response.data;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
 };
 
+export class Profile {
+  constructor() {
+    this.firstName = null;
+    this.lastName = null;
+    this.login = null;
+    this.auditRatio = null;
+    this.auditsSucceeded = null;
+    this.auditsFailed = null;
+    this.level = null;
 
-export const GQL_GetProfile = /*gql*/`
+    this.response = this.init();
+
+    return this
+  }
+
+  async init() {
+    try {
+      const response = await fetchData(GQL_GetProfile, {} );
+
+      const profile = response?.data?.profile;
+      if (Array.isArray(profile)) {
+        const userProfile = profile[0];
+        this.firstName = userProfile.firstName;
+        this.lastName = userProfile.lastName;
+        this.login = userProfile.login;
+        this.auditRatio = userProfile.auditRatio;
+        this.auditsSucceeded = userProfile.audits_succeeded.aggregate.count;
+        this.auditsFailed = userProfile.audits_failed.aggregate.count;
+
+        // Assign level data
+        this.level = response?.data?.level[0]?.amount;
+      } else {
+        throw new Error("Invalid data received!");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return
+    }
+  }
+}
+
+export class Data {
+  constructor() {
+    this.transactions = null;
+    this.skills = null;
+    this.projects = null;
+    this.moduleStartAt =null;
+    this.moduleEndAt =null ;
+
+    this.response = this.init();
+
+    return this
+  }
+  async init() {
+    try {
+      // Fetch transactions
+      const transactionData = await fetchData(GET_LAST_TRANSACTIONS, {});
+      const transactions = transactionData?.user[0]?.transactions;
+      if (Array.isArray(transactions)) {
+        transactions.forEach(t => t.project = t.project.name);
+        this.transactions = transactions;
+      } else {
+        throw new Error("Invalid transactions data received!");
+      }
+
+      // Fetch skills
+      const skillsData = await fetchData(GET_Skills, {});
+      const skills = skillsData?.user[0]?.skills;
+      if (Array.isArray(skills)) {
+        this.skills = skills;
+      } else {
+        throw new Error("Invalid skills data received!");
+      }
+
+      // Fetch projects
+      const projectsData = await fetchData(GET_Projects, { name: "Module" });
+      this.moduleStartAt = new Date(projectsData?.module[0]?.startAt);
+      this.moduleEndAt = new Date(projectsData?.module[0]?.endAt);
+      const projects = projectsData?.projects;
+      if (Array.isArray(projects)) {
+        projects.forEach(p => p.project = p.project.name);
+        this.projects = projects;
+      } else {
+        throw new Error("Invalid projects data received!");
+      }
+
+    } catch (error) {
+      console.error("An error occurred during initialization:", error);
+    }
+    console.log('data',this)
+  }
+  renderTransactions() {
+    if(!Array.isArray(this.transactions)) {
+      throw new Error("data not loaded yet")
+    };
+    
+    if (!Array.isArray(this.transactions)) {
+      return `<tr><td>sorry error occured during fetching of transactions</td></tr>`
+    }
+    let res =""
+    this.transactions.forEach((t) => {
+      res += `<tr><td>${t.project}</td><td>${t.amount>100000?Math.floor(t.amount/1000+" KB"): t.amount+ "B"}</td><td>${t.createdAt.slice(0,10)}</td></tr>`
+    } )
+    return res
+  }
+}
+
+const GQL_GetProfile = /*gql*/`
 {
   profile: user {
     firstName
     lastName
-    githubId
     login
     auditRatio
     audits_succeeded: audits_aggregate(where: {closureType: {_eq: succeeded}}) {
@@ -50,15 +177,52 @@ export const GQL_GetProfile = /*gql*/`
   }
 }`
 
-export const GET_LAST_TRANSACTIONS = /*gql*/`
+const GET_LAST_TRANSACTIONS = /*gql*/`
 {
   user {
-    transactions(limit: 3, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
-      object {
+    transactions(limit: 5, where: {type: {_eq: "xp"}}, order_by: {createdAt: desc}) {
+      project:object {
         name
       }
       amount
       createdAt
     }
+  }
+}`
+
+const GET_Skills = /*gql*/`
+{
+  user {
+    skills :transactions(
+      where: { type: { _nin: ["xp", "level", "up", "down"] } }
+      distinct_on: type
+      order_by: {type: asc, amount: desc}
+    ) {
+      name:type
+      level:amount
+    }
+  }
+}`
+
+const GET_Projects = /*gql*/`
+query GetProjects($name: String!) {
+  module:event(where: {object: {name: {_eq: $name}}}){
+    startAt
+    endAt
+  }
+  projects:transaction(
+    where: {
+      _and: [
+        { type: { _eq: "xp" } }, 
+        { event: { object: { name: { _eq: $name } } } },
+      ]
+    },
+    order_by: {createdAt: asc}
+  ) {
+    xp: amount
+    project: object {
+      name
+    }
+    createdAt
   }
 }`
