@@ -18,17 +18,18 @@ async function fetchGraphQL(query, variables) {
 }
 
 const handleError = (error) => {
-    if (typeof error.message === "string" && error.message.includes('JWTExpired')) {
-      localStorage.removeItem("token");
-      displayof_login.toggle();
-    }
-    console.error(error);
-  };
+  if (typeof error?.message === "string" && error.message.includes('JWTExpired')) {
+    localStorage.removeItem("token");
+    displayof_login.toggle();
+  }
+  console.error(error);
+};
 
 const fetchData = async (query, variables) => {
   try {
     const response = await fetchGraphQL(query, variables);
     if (Array.isArray(response.errors)) {
+      console.log(response.errors[0].message)
       throw new Error(response.errors[0].message);
     }
     return response.data;
@@ -48,16 +49,15 @@ export class Profile {
     this.auditsFailed = null;
     this.level = null;
 
-    this.response = this.init();
-
     return this
   }
 
   async init() {
     try {
-      const response = await fetchData(GQL_GetProfile, {} );
+      const response = await fetchData(GQL_GetProfile, {});
 
-      const profile = response?.data?.profile;
+      const profile = response?.profile;
+      console.log("eror123", profile, response)
       if (Array.isArray(profile)) {
         const userProfile = profile[0];
         this.firstName = userProfile.firstName;
@@ -68,14 +68,14 @@ export class Profile {
         this.auditsFailed = userProfile.audits_failed.aggregate.count;
 
         // Assign level data
-        this.level = response?.data?.level[0]?.amount;
+        this.level = response?.level[0]?.amount;
       } else {
         throw new Error("Invalid data received!");
       }
     } catch (error) {
       console.error(error);
     } finally {
-      return
+      return this
     }
   }
 }
@@ -85,10 +85,10 @@ export class Data {
     this.transactions = null;
     this.skills = null;
     this.projects = null;
-    this.moduleStartAt =null;
-    this.moduleEndAt =null ;
+    this.moduleStartAt = null;
+    this.moduleEndAt = null;
 
-    this.response = this.init();
+    // this.response = this.init();
 
     return this
   }
@@ -128,20 +128,24 @@ export class Data {
     } catch (error) {
       console.error("An error occurred during initialization:", error);
     }
-    console.log('data',this)
+    console.log('data', this)
+    return this
   }
   renderTransactions() {
-    if(!Array.isArray(this.transactions)) {
+    if (!Array.isArray(this.transactions)) {
       throw new Error("data not loaded yet")
     };
-    
+
     if (!Array.isArray(this.transactions)) {
       return `<tr><td>sorry error occured during fetching of transactions</td></tr>`
     }
-    let res =""
+    let res = ""
     this.transactions.forEach((t) => {
-      res += `<tr><td>${t.project}</td><td>${t.amount>100000?Math.floor(t.amount/1000+" KB"): t.amount+ "B"}</td><td>${t.createdAt.slice(0,10)}</td></tr>`
-    } )
+      res += `<tr><td>${t.project || "couldn't get project name"
+        }</td><td>${((t.amount > 100000) ? Math.floor(t.amount / 1000) + " KB" : t.amount + "B") || "couldn't get xp"
+        }</td><td>${t.createdAt.slice(0, 10) || "couldn't get date"
+        }</td></tr>`
+    })
     return res
   }
 }

@@ -76,6 +76,7 @@ tr:last-child {
     top: 0;
     left: 0;
 }
+
 #displayof_login div {
     display: flex;
     height: fit-content;
@@ -85,6 +86,11 @@ tr:last-child {
 }
 
 h2 {
-  border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, transparent, violet, transparent) 1;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, transparent, violet, transparent) 1;
+}
+
+svg {
+    max-width: 100%;
+    height: auto;
 }
