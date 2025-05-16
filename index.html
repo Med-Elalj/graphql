@@ -52,9 +52,20 @@
         <h2>Module</h2>
         <svg id="dispalyof_module" width="900" height="450" viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
             <rect width="100%" height="100%" fill="#333" />
-            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="7em" fill="#888">
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="7em" fill="#888" id="displayof_module_nodata">
                 No data yet
             </text>
+            <path stroke="#fff" d="M50 400h800M50 50v350"/>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50  50h800"/><text x="40" y="50"  text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_5"></text>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 120h800"/><text x="40" y="120" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_4"></text>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 190h800"/><text x="40" y="190" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_3"></text>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 260h800"/><text x="40" y="260" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_2"></text>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 330h800"/><text x="40" y="330" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_1"></text>
+            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 400h800"/><text x="40" y="400" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_0"></text>
+            
+            <g transform="translate(50, 400)">
+                <g transform="scale(0.8, -0.35) translate(0, 0)" translate="50,350"  id="displayof_module_graph"></g>
+            </g>
         </svg>
     </div>
     <div>
