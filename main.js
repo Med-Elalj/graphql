@@ -11,11 +11,8 @@ function calcCoordinates(Nsides, radius) {
     for (let i = 0; i < Nsides; i++) {
         const x = Math.round(radius * Math.cos(angle * i));
         const y = Math.round(radius * Math.sin(angle * i));
-        // console.log(i,x,y,radius * Math.cos(angle * i))
         coord.push({ x: x, y: y });
     };
-
-    // console.log("coord",coord , Nsides,radius)
     return coord;
 
 };
@@ -62,7 +59,6 @@ function module(projects) {
         xp += project.xp
         let x = toPersent(new Date(project.createdAt));
         let y = (xp/maxXp)*1000;
-        console.log(x,y ,project,maxXp,(xp/maxXp),xp,(xp/maxXp)*350)
         last += `<circle  cx="${x}" cy="${y}" r="5" fill="red" ><title>${project.project} : ${project.xp  }  PUSHED AT: ${new Date(project.createdAt).toLocaleDateString()}</title></circle>\n`;
         points +=` ${x},${y} `
     });
@@ -96,13 +92,13 @@ async function loadPage() {
 
     let total_audit = Number(profile.auditsSucceeded) + Number(profile.auditsFailed)
 
-    displayof_Name.innerHTML = profile.firstName + " " + profile.lastName;
-    displayof_Name.title = profile.login;
-    displayof_audit_ratio.innerHTML = profile.auditRatio;
-    displayof_audit_total.innerHTML = total_audit;
-    displayof_audit_successRate.innerHTML = Math.round((Number(profile.auditsSucceeded) / total_audit) * 1000) / 10;
-    displayof_audit_failRate.innerHTML = Math.round((Number(profile.auditsFailed) / total_audit) * 1000) / 10;
-    displayof_level.innerHTML = profile.level;
+    displayof_Name.innerHTML = profile.firstName + " " + profile.lastName || "Name";
+    displayof_Name.title = profile.login || "Name";
+    displayof_audit_ratio.innerHTML = profile.auditRatio || "audit_ratio";
+    displayof_audit_total.innerHTML = total_audit || "audit_total";
+    displayof_audit_successRate.innerHTML = Math.round((Number(profile.auditsSucceeded) / total_audit) * 1000) / 10 || "audit_successRate";
+    displayof_audit_failRate.innerHTML = Math.round((Number(profile.auditsFailed) / total_audit) * 1000) / 10 || "audit_failRate";
+    displayof_level.innerHTML = profile.level || "level";
 
     displayof_last_transactions.innerHTML = data.renderTransactions()
 };
@@ -137,9 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadPage();
                     displayof_login.toggle();
                 })
-            }).then(data => { console.log("data", data) });
+            });
         } catch (error) {
             alert(error.message)
+            // hello
+            
         }
         console.log("logged in")
     });

@@ -48,7 +48,6 @@ export class Profile {
     this.auditsSucceeded = null;
     this.auditsFailed = null;
     this.level = null;
-
     return this
   }
 
@@ -57,7 +56,6 @@ export class Profile {
       const response = await fetchData(GQL_GetProfile, {});
 
       const profile = response?.profile;
-      console.log("eror123", profile, response)
       if (Array.isArray(profile)) {
         const userProfile = profile[0];
         this.firstName = userProfile.firstName;
@@ -87,9 +85,6 @@ export class Data {
     this.projects = null;
     this.moduleStartAt = null;
     this.moduleEndAt = null;
-
-    // this.response = this.init();
-
     return this
   }
   async init() {
@@ -128,7 +123,7 @@ export class Data {
     } catch (error) {
       console.error("An error occurred during initialization:", error);
     }
-    console.log('data', this)
+    console.log('data', this)  // TODO remove
     return this
   }
   renderTransactions() {
@@ -142,7 +137,7 @@ export class Data {
     let res = ""
     this.transactions.forEach((t) => {
       res += `<tr><td>${t.project || "couldn't get project name"
-        }</td><td>${((t.amount > 100000) ? Math.floor(t.amount / 1000) + " KB" : t.amount + "B") || "couldn't get xp"
+        }</td><td>${((t.amount > 10000) ? Math.floor(t.amount / 1000) + " KB" : t.amount + "B") || "couldn't get xp"
         }</td><td>${t.createdAt.slice(0, 10) || "couldn't get date"
         }</td></tr>`
     })
