@@ -1,10 +1,11 @@
 * {
-    text-shadow: 0px 0px 1px white;
+    text-shadow: 1px 1px 0px var(--white), -1px -1px 0px var(--white), 1px -1px 0px var(--white), -1px 1px 0px var(--white);
 }
+    
 
 body {
-    padding-top: 5vh;
-    background-color: #5f9ea0;
+    padding: 5vh 2vw 4vh 2vw;
+    background-color: var(--body);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -15,26 +16,35 @@ body div {
     padding: 10px;
     border-radius: 10px;
     text-align: center;
+    box-shadow: 0 0px 5px var(--boxshadow);
+    background-color: var(--div);
+    animation: linear boxshadow;
+    animation-timeline: view();
 }
 
+@keyframes boxshadow {
+    44% {
+        box-shadow: 0px 5px 20px var(--boxshadow);
+    }
+    60% {
+        box-shadow: 0px -5px 20px var(--boxshadow);
+    }
+}
 nav {
     position: fixed;
     display: flex;
     width: -moz-available;
+    width: -webkit-fill-available;
     justify-content: space-between;
-    background-color: orangered;
+    background-color: var(--nav);
     top: 0;
     left: 0;
-    padding: 10px;
+    padding: 1.3vh 2.3vw 1.3vh 2.3vw;
     margin: 0 0 20px 0;
-}
-
-body {
-    background-color: #5f9ea0;
-}
-
-body div {
-    background-color: #587677;
+    box-shadow: 0 5px 20px black;
+    align-content: center;
+    height: 2em;
+    font-size: x-large;
 }
 
 table {
@@ -62,9 +72,9 @@ tr:last-child {
 .circle {
     border-radius: 100%;
 }
-
 #displayof_login {
-    background-image: radial-gradient(circle, #000 3%, #0000 100%), repeating-conic-gradient(#0f0 0deg 10deg, #00f 10deg 20deg);
+    background-image: radial-gradient(circle, #000 3%, #0000 100%),
+        repeating-conic-gradient(#0f0 0deg 10deg, #00f 10deg 20deg);
     position: fixed;
     z-index: 1000;
     display: flex;
@@ -83,14 +93,60 @@ tr:last-child {
     align-self: center;
     margin-bottom: 0;
     align-content: center;
+    height: 4em;
+    /* border: ; */
+    /* --black: ; */
+    border-radius: 6em;
+    background-color: var(--graphcolor);
 }
 
 h2 {
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(to right, transparent, violet, transparent) 1;
+    letter-spacing: 0.1em;
 }
 
 svg {
     max-width: 100%;
     height: auto;
+}
+#displayof_login div form input {
+  width: 8em;
+  border-radius: 4em;
+  text-align: center;
+  color: var(--black);
+  text-shadow: none;
+  background: transparent;
+  border: none;
+}
+
+#displayof_login div form input:focus-visible{
+    border: none;
+}
+:root {
+    --black: #000;
+    --white: #fff;
+    --boxshadow: #000000c7;
+
+    --nav: #fbf5dd;
+    --div: #a6cdc6;
+    --body: #16404d;
+    --graphcolor: #4e71ff58;
+    color: var(--black);
+
+    font-family: "Franklin Gothic Heavy";
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --boxshadow: #ffffffc7;
+        --black: #fff;
+        --white: #000;
+        --nav: #35374b;
+        --div: #344955;
+        --body: #50727b;
+        --graphcolor: #78a08358;
+    }
+}
+button {
+    cursor: pointer;
 }

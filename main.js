@@ -19,27 +19,27 @@ function calcCoordinates(Nsides, radius) {
 
 // Function to update the SVG polygon based on skill values
 function renderGraph(skills) {
-    let res = calcCoordinates(skills.length, 60).map(item => {
-        return `<line x1="0" y1="0" x2="${item.x}" y2="${item.y}" stroke="#cce" stroke-width="2" />\n`;
+    let res = calcCoordinates(skills.length, 600).map(item => {
+        return `<line x1="0" y1="0" x2="${item.x}" y2="${item.y}" stroke="var(--black)" stroke-width="5" />\n`;
     }).join(' ');
     let coord = [20, 40, 60, 80, 100].forEach(r => {
-        let points = calcCoordinates(skills.length, 60 * r / 100).map(item => `${item.x},${item.y}`).join(' ');
-        res += `<polygon class="polygon" points="${points}" stroke="#ccc" fill="none"/>\n`
+        let points = calcCoordinates(skills.length, 600 * r / 100).map(item => `${item.x},${item.y}`).join(' ');
+        res += `<polygon class="polygon" points="${points}" stroke="var(--black)" fill="none"/>\n`
     })
 
     const polygon = document.getElementById("skill-polygon");
-    const labelcoord = calcCoordinates(skills.length, 78)
+    const labelcoord = calcCoordinates(skills.length, 780)
     let last = '';
     const points = skills.map((skill, index) => {
-        let c = calcCoordinates(skills.length, 60 * skill.level / 100)[index];
-        last += `<circle onhover="console.log("test")" cx="${c.x}" cy="${c.y}" r="3" fill="red" ><title>${skill.name} : ${skill.level}</title></circle>\n`;
-        last += `<text x="${labelcoord[index].x}" y="${labelcoord[index].y}" text-anchor="middle" fill="red" dominant-baseline="central"  font-size="9px"><title>${skill.name} : ${skill.level}</title>${skill.name}</text>\n`
+        let c = calcCoordinates(skills.length, 600 * skill.level / 100)[index];
+        last += `<circle onhover="console.log("test")" cx="${c.x}" cy="${c.y}" r="15" fill="green" ><title>${skill.name} : ${skill.level}</title></circle>\n`;
+        last += `<text x="${labelcoord[index].x}" y="${labelcoord[index].y}" text-anchor="middle" fill="var(--black)" dominant-baseline="central"  font-size="4em"><title>${skill.name} ${skill.level}%</title>${skill.name}</text>\n`
         return `${c.x},${c.y}`;
     }).join(" ");
     
-    res += `<polygon id="skill-polygon" points="${points}" fill="rgba(0,123,255,0.5)" stroke="#007bff" stroke-width="2" />\n`+last
-    return `<svg id="skills-graph" width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(100,100)" id="graph_display">${res}</g>
+    res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="2" />\n`+last
+    return `<svg id="skills-graph" width="400" height="400" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(1000,1000)" id="graph_display">${res}</g>
         </svg>`
 }
 
@@ -55,15 +55,17 @@ function module(projects) {
     let res ="";
     let last ="";
     let points = "0,0";
-    projects.forEach((project) => {
-        xp += project.xp
-        let x = toPersent(new Date(project.createdAt));
+    projects.forEach((p) => {
+        xp += p.xp
+        let x = toPersent(new Date(p.createdAt));
         let y = (xp/maxXp)*1000;
-        last += `<circle  cx="${x}" cy="${y}" r="5" fill="red" ><title>${project.project} : ${project.xp  }  PUSHED AT: ${new Date(project.createdAt).toLocaleDateString()}</title></circle>\n`;
+        last += `<circle  cx="${x}" cy="${y}" r="5" fill="var(--black)" ><title>${p.project}  ${
+(p.xp > 10000 ? Math.floor(p.xp / 1000) + " KB" : p.xp + "B") || "couldn't get xp" 
+}  Pushed at: ${new Date(p.createdAt).toLocaleDateString()}</title></circle>\n`;
         points +=` ${x},${y} `
     });
     points += "1000,0"
-    res += `<polygon id="skill-polygon" points="${points}" fill="rgba(0,123,255,0.5)" stroke="#007bff" stroke-width="5" />\n`
+    res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="5" />\n`
     displayof_module_nodata.innerHTML = ""
     displayof_module_number_5.innerHTML = Math.round(maxXp/5)>1000?Math.round((maxXp/5)/1000)+ " KB":Math.round(maxXp/5) +" B";
     displayof_module_number_4.innerHTML = Math.round(maxXp/4)>1000?Math.round((maxXp/4)/1000)+ " KB":Math.round(maxXp/4) +" B";

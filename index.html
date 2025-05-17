@@ -11,7 +11,13 @@
 </head>
 
 <body>
-    <nav><span>Hello <span id="displayof_Name">FirstName LastName</span> </span><button id="logout_btn">logout</button>
+    <nav><span onclick="console.log('test')" style="align-content: center;">Hello <span id="displayof_Name">FirstName LastName</span> </span>
+        <span id="logout_btn" style="display: inline-block; font-size: x-large;">
+  <svg width="2em" height="2em" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <path d="M23 4H7a2 2 0 0 0-2 2v24a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6h-9.37a1 1 0 0 1-1-1 1 1 0 0 1 1-1H25V6a2 2 0 0 0-2-2" class="clr-i-solid clr-i-solid-path-1" fill="var(--black)"></path>
+  <path d="M28.16 17.28a1 1 0 0 0-1.41 1.41L30.13 22H25v2h5.13l-3.38 3.46a1 1 0 1 0 1.41 1.41l5.84-5.8Z" class="clr-i-solid clr-i-solid-path-2" fill="var(--black)"></path>
+</svg>
+    </span>
     </nav>
 
     <div>
@@ -52,17 +58,17 @@
         <h2>Module</h2>
         <h3 id="displayof_module_time" ></h3>
         <svg id="dispalyof_module" width="900" height="450" viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100%" height="100%" fill="#333" />
+            <rect width="100%" height="100%" fill="var(--div)" />
             <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="7em" fill="#888" id="displayof_module_nodata">
                 No data yet
             </text>
-            <path stroke="#fff" d="M50 400h800M50 50v350"/>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50  50h800"/><text x="40" y="50"  text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_5"></text>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 120h800"/><text x="40" y="120" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_4"></text>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 190h800"/><text x="40" y="190" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_3"></text>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 260h800"/><text x="40" y="260" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_2"></text>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 330h800"/><text x="40" y="330" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_1"></text>
-            <path stroke="#fff" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 400h800"/><text x="40" y="400" text-anchor="end" fill="#fff" font-size="10" id="displayof_module_number_0"></text>
+            <path stroke="var(--black)" d="M50 400h800M50 50v350"/>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50  50h800"/><text x="40" y="50"  text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_5"></text>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 120h800"/><text x="40" y="120" text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_4"></text>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 190h800"/><text x="40" y="190" text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_3"></text>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 260h800"/><text x="40" y="260" text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_2"></text>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 330h800"/><text x="40" y="330" text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_1"></text>
+            <path stroke="var(--black)" stroke-dasharray="1,5" stroke-opacity=".4" d="M50 400h800"/><text x="40" y="400" text-anchor="end" fill="var(--black)" font-size="10" id="displayof_module_number_0"></text>
             
             <g transform="translate(50, 400)">
                 <g transform="scale(0.8, -0.35) translate(0, 0)" translate="50,350"  id="displayof_module_graph"></g>
@@ -71,7 +77,7 @@
     </div>
     <div>
         <h2>Skills</h2>
-        <div id="graph_display">
+        <span id="graph_display">
             <svg id="dispalyof_module" width="900" height="450" viewBox="0 0 900 450"
                 xmlns="http://www.w3.org/2000/svg">
                 <rect width="100%" height="100%" fill="#333" />
@@ -79,14 +85,21 @@
                     No data yet
                 </text>
             </svg>
-        </div>
+        </span>
     </div>
     <div id="displayof_login">
         <div>
-            <form id="login_form" style="margin-bottom: 0;">
+            <form id="login_form" method="POST" style="align-content: center;">
                 <input type="text" name="username" placeholder="username" required>
                 <input type="password" name="password" placeholder="password" required>
-                <button type="submit">login</button>
+                <button type="submit" style="border: none;background: none;" placeholder="azer value"">
+                    <svg width="1em" height="1em" viewBox="3 4 28 28" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M28 4H12a2 2 0 0 0-2 2v7h8.5l-3.38-3.29a1 1 0 0 1 1.41-1.41l5.79 5.79-5.79 5.79a1 1 0 0 1-1.41-1.41L18.5 15H10v15a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2" class="clr-i-solid clr-i-solid-path-1" fill="var(--black)"/>
+                        <path d="M10 13H4a1 1 0 0 0-1 1 1 1 0 0 0 1 1h6Z" class="clr-i-solid clr-i-solid-path-2" fill="var(--black)"/>
+                    </svg>
+
+                    </button>
+
             </form>
         </div>
     </div>
