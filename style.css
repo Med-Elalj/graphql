@@ -1,5 +1,6 @@
 * {
     text-shadow: 1px 1px 0px var(--white), -1px -1px 0px var(--white), 1px -1px 0px var(--white), -1px 1px 0px var(--white);
+    text-transform: capitalize;
 }
     
 
@@ -31,7 +32,7 @@ body div {
     }
 }
 nav {
-    position: fixed;
+    position: sticky;
     display: flex;
     width: -moz-available;
     width: -webkit-fill-available;
@@ -45,6 +46,7 @@ nav {
     align-content: center;
     height: 2em;
     font-size: x-large;
+    box-shadow: 0 0px 5vh var(--boxshadow);
 }
 
 table {
@@ -116,8 +118,9 @@ svg {
   text-align: center;
   color: var(--black);
   text-shadow: none;
-  background: transparent;
-  border: none;
+  background: var(--div);
+  border: solid 1ex var(--body);
+  font-size: larger;
 }
 
 #displayof_login div form input:focus-visible{
