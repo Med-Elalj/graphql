@@ -36,8 +36,8 @@ function renderGraph(skills) {
         last += `<text x="${labelcoord[index].x}" y="${labelcoord[index].y}" text-anchor="middle" fill="var(--black)" dominant-baseline="central"  font-size="4em"><title>${skill.name} ${skill.level}%</title>${skill.name}</text>\n`
         return `${c.x},${c.y}`;
     }).join(" ");
-    
-    res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="2" />\n`+last
+
+    res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="2" />\n` + last
     return `<svg id="skills-graph" width="400" height="400" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(1000,1000)" id="graph_display">${res}</g>
         </svg>`
@@ -46,34 +46,33 @@ function renderGraph(skills) {
 function module(projects) {
     // { xp: 5000, project: "go-reloaded", createdAt: "2024-04-29T12:19:33.931771+00:00" }
     const start = new Date(projects[0].createdAt)
-    const long = new Date(projects[projects.length-1].createdAt) -start
+    const long = new Date(projects[projects.length - 1].createdAt) - start
     const toPersent = (date) => {
-        return ((date - start)/long)*1000
+        return ((date - start) / long) * 1000
     }
     let xp = 0;
     const maxXp = projects.reduce((sum, item) => sum + item.xp, 0);
-    let res ="";
-    let last ="";
+    let res = "";
+    let last = "";
     let points = "0,0";
     projects.forEach((p) => {
         xp += p.xp
         let x = toPersent(new Date(p.createdAt));
-        let y = (xp/maxXp)*1000;
-        last += `<circle  cx="${x}" cy="${y}" r="5" fill="var(--black)" ><title>${p.project}  ${
-(p.xp > 10000 ? Math.floor(p.xp / 1000) + " KB" : p.xp + "B") || "couldn't get xp" 
-}  Pushed at: ${new Date(p.createdAt).toLocaleDateString()}</title></circle>\n`;
-        points +=` ${x},${y} `
+        let y = (xp / maxXp) * 1000;
+        last += `<circle  cx="${x}" cy="${y}" r="5" fill="var(--black)" ><title>${p.project}  ${(p.xp > 10000 ? Math.floor(p.xp / 1000) + " KB" : p.xp + "B") || "couldn't get xp"
+            }  Pushed at: ${new Date(p.createdAt).toLocaleDateString()}</title></circle>\n`;
+        points += ` ${x},${y} `
     });
     points += "1000,0"
     res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="5" />\n`
     displayof_module_nodata.innerHTML = ""
-    displayof_module_number_5.innerHTML = Math.round(maxXp/5)>1000?Math.round((maxXp/5)/1000)+ " KB":Math.round(maxXp/5) +" B";
-    displayof_module_number_4.innerHTML = Math.round(maxXp/4)>1000?Math.round((maxXp/4)/1000)+ " KB":Math.round(maxXp/4) +" B";
-    displayof_module_number_3.innerHTML = Math.round(maxXp/3)>1000?Math.round((maxXp/3)/1000)+ " KB":Math.round(maxXp/3) +" B";
-    displayof_module_number_2.innerHTML = Math.round(maxXp/2)>1000?Math.round((maxXp/2)/1000)+ " KB":Math.round(maxXp/2) +" B";
-    displayof_module_number_1.innerHTML = Math.round(maxXp/1)>1000?Math.round((maxXp/1)/1000)+ " KB":Math.round(maxXp/1) +" B";
+    displayof_module_number_5.innerHTML = Math.round(maxXp / 5) > 1000 ? Math.round((maxXp / 5) / 1000) + " KB" : Math.round(maxXp / 5) + " B";
+    displayof_module_number_4.innerHTML = Math.round(maxXp / 4) > 1000 ? Math.round((maxXp / 4) / 1000) + " KB" : Math.round(maxXp / 4) + " B";
+    displayof_module_number_3.innerHTML = Math.round(maxXp / 3) > 1000 ? Math.round((maxXp / 3) / 1000) + " KB" : Math.round(maxXp / 3) + " B";
+    displayof_module_number_2.innerHTML = Math.round(maxXp / 2) > 1000 ? Math.round((maxXp / 2) / 1000) + " KB" : Math.round(maxXp / 2) + " B";
+    displayof_module_number_1.innerHTML = Math.round(maxXp / 1) > 1000 ? Math.round((maxXp / 1) / 1000) + " KB" : Math.round(maxXp / 1) + " B";
     displayof_module_number_0.innerHTML = "0 B";
-    return res+last
+    return res + last
 }
 
 async function loadPage() {
@@ -84,12 +83,12 @@ async function loadPage() {
 
     displayof_module_graph.innerHTML = module(data.projects)
     window.projects = data.projects
-    if (data.skills < 10 ) {
+    if (data.skills < 10) {
         graph_display.innerTML = renderGraph(skills)
     } else {
         let d1 = data.skills.slice(0, Math.floor(data.skills.length / 2));
         let d2 = data.skills.slice(Math.floor(data.skills.length / 2));
-        graph_display.innerHTML = renderGraph(d1)+renderGraph(d2)
+        graph_display.innerHTML = renderGraph(d1) + renderGraph(d2)
     }
 
     let total_audit = Number(profile.auditsSucceeded) + Number(profile.auditsFailed)
@@ -112,34 +111,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     logout_btn.addEventListener('click', () => logout())
 
-    login_form.addEventListener("submit", (event) => {
+    login_form.addEventListener("submit", async (event) => {
         event.preventDefault()
         const credentials = {
             username: login_form?.username.value,
             password: login_form?.password.value,
         }
         try {
-            fetch(AUTH_URL, {
+            const res = await fetch(AUTH_URL, {
                 method: 'POST',
                 headers: {
                     Authorization: `Basic ${btoa(credentials.username + ":" + credentials.password)}`
                 }
-            }).then(res => {
-                if (res.error) {
-                    throw res.error;
-                }
-                res.json().then(token => {
-                    console.log("test", token)
-
-                    localStorage.setItem('token', token);
-                    loadPage();
-                    displayof_login.toggle();
-                })
             });
+
+            if (!res.ok) {
+                console.log(res)
+                const resBody = await res.json();
+                throw new Error('Failed to log in\n'+(resBody.error||''));
+            }
+
+            const token = await res.json();
+
+            // Check if token contains an error
+            if (token.error) {
+                throw new Error(token.error);
+            }
+
+            // Save the token and handle successful login
+            localStorage.setItem('token', token);
+            loadPage();
+            displayof_login.toggle();
+
         } catch (error) {
-            alert(error.message)
-            // hello
-            
+            alert(error.message);
         }
         console.log("logged in")
     });
