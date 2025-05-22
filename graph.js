@@ -118,7 +118,6 @@ export class Data {
     } catch (error) {
       console.error("An error occurred during initialization:", error);
     }
-    console.log('data', this)  // TODO remove
     return this
   }
   renderTransactions() {
