@@ -121,6 +121,7 @@ svg {
   background: var(--div);
   border: solid 1ex var(--body);
   font-size: larger;
+  text-transform: none;
 }
 
 #displayof_login div form input:focus-visible{
