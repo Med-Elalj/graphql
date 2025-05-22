@@ -5,6 +5,8 @@ function logout() {
     location.reload();
 }
 
+window.logout = logout
+
 function calcCoordinates(Nsides, radius) {
     const angle = Math.PI / (Nsides / 2);
     let coord = [];
@@ -59,19 +61,19 @@ function module(projects) {
         xp += p.xp
         let x = toPersent(new Date(p.createdAt));
         let y = (xp / maxXp) * 1000;
-        last += `<circle  cx="${x}" cy="${y}" r="5" fill="var(--black)" ><title>${p.project}  ${(p.xp > 10000 ? Math.floor(p.xp / 1000) + " KB" : p.xp + "B") || "couldn't get xp"
+        last += `<circle  cx="${x}" cy="${y}" r="5" fill="var(--black)" ><title>${p.project}  ${(p.xp > 9999 ? (p.xp / 1000).toFixed(0) + " KB" : p.xp + "B") || "couldn't get xp"
             }  Pushed at: ${new Date(p.createdAt).toLocaleDateString()}</title></circle>\n`;
         points += ` ${x},${y} `
     });
     points += "1000,0"
     res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="5" />\n`
     displayof_module_nodata.innerHTML = ""
-    displayof_module_number_5.innerHTML = Math.round(maxXp / 5) > 1000 ? Math.round((maxXp / 5) / 1000) + " KB" : Math.round(maxXp / 5) + " B";
-    displayof_module_number_4.innerHTML = Math.round(maxXp / 4) > 1000 ? Math.round((maxXp / 4) / 1000) + " KB" : Math.round(maxXp / 4) + " B";
-    displayof_module_number_3.innerHTML = Math.round(maxXp / 3) > 1000 ? Math.round((maxXp / 3) / 1000) + " KB" : Math.round(maxXp / 3) + " B";
-    displayof_module_number_2.innerHTML = Math.round(maxXp / 2) > 1000 ? Math.round((maxXp / 2) / 1000) + " KB" : Math.round(maxXp / 2) + " B";
-    displayof_module_number_1.innerHTML = Math.round(maxXp / 1) > 1000 ? Math.round((maxXp / 1) / 1000) + " KB" : Math.round(maxXp / 1) + " B";
     displayof_module_number_0.innerHTML = "0 B";
+    displayof_module_number_1.innerHTML = (maxXp / 5).toFixed(0) > 999 ? ((maxXp / 5) / 1000).toFixed(0) + " KB" : (maxXp / 5).toFixed(0) + " B";
+    displayof_module_number_2.innerHTML = (maxXp / 4).toFixed(0) > 999 ? ((maxXp / 4) / 1000).toFixed(0) + " KB" : (maxXp / 4).toFixed(0) + " B";
+    displayof_module_number_3.innerHTML = (maxXp / 3).toFixed(0) > 999 ? ((maxXp / 3) / 1000).toFixed(0) + " KB" : (maxXp / 3).toFixed(0) + " B";
+    displayof_module_number_5.innerHTML = (maxXp / 1).toFixed(0) > 999 ? ((maxXp / 1) / 1000).toFixed(0) + " KB" : (maxXp / 1).toFixed(0) + " B";
+    displayof_module_number_4.innerHTML = (maxXp / 2).toFixed(0) > 999 ? ((maxXp / 2) / 1000).toFixed(0) + " KB" : (maxXp / 2).toFixed(0) + " B";
     return res + last
 }
 
@@ -95,10 +97,10 @@ async function loadPage() {
 
     displayof_Name.innerHTML = profile.firstName + " " + profile.lastName || "Name";
     displayof_Name.title = profile.login || "Name";
-    displayof_audit_ratio.innerHTML = profile.auditRatio || "audit_ratio";
+    displayof_audit_ratio.innerHTML = profile.auditRatio.toFixed(2) || "audit_ratio";
     displayof_audit_total.innerHTML = total_audit || "audit_total";
-    displayof_audit_successRate.innerHTML = Math.round((Number(profile.auditsSucceeded) / total_audit) * 1000) / 10 || "audit_successRate";
-    displayof_audit_failRate.innerHTML = Math.round((Number(profile.auditsFailed) / total_audit) * 1000) / 10 || "audit_failRate";
+    displayof_audit_successRate.innerHTML = ((profile.auditsSucceeded / total_audit) * 100).toFixed(1)+ "%" || "audit_successRate";
+    displayof_audit_failRate.innerHTML = ((profile.auditsFailed / total_audit) * 100).toFixed(1) + "%" || "audit_failRate";
     displayof_level.innerHTML = profile.level || "level";
 
     displayof_last_transactions.innerHTML = data.renderTransactions()

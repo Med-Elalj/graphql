@@ -13,17 +13,12 @@ async function fetchGraphQL(query, variables) {
       variables: variables,
     }),
   });
+  if (!response.ok) {
+    window.logout()
+  }
 
   return await response.json();
 }
-
-const handleError = (error) => {
-  if (typeof error?.message === "string" && error.message.includes('JWTExpired')) {
-    localStorage.removeItem("token");
-    displayof_login.toggle();
-  }
-  console.error(error);
-};
 
 const fetchData = async (query, variables) => {
   try {
@@ -34,7 +29,7 @@ const fetchData = async (query, variables) => {
     }
     return response.data;
   } catch (error) {
-    handleError(error);
+    console.error(error);
     throw error;
   }
 };
@@ -137,7 +132,7 @@ export class Data {
     let res = ""
     this.transactions.forEach((t) => {
       res += `<tr><td>${t.project || "couldn't get project name"
-        }</td><td>${((t.amount > 10000) ? Math.floor(t.amount / 1000) + " KB" : t.amount + "B") || "couldn't get xp"
+        }</td><td>${((t.amount > 9999) ? (t.amount / 1000).toFixed(0) + " KB" : t.amount + "B") || "couldn't get xp"
         }</td><td>${t.createdAt.slice(0, 10) || "couldn't get date"
         }</td></tr>`
     })
