@@ -88,7 +88,6 @@ function module(projects) {
     });
     points += "1000,0"
     res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="5" />\n`
-    displayof_module_nodata.innerHTML = ""
     displayof_module_number_0.innerHTML = "0 B";
     displayof_module_number_1.innerHTML = (maxXp / 5).toFixed(0) > 999 ? ((maxXp / 5) / 1000).toFixed(0) + " KB" : (maxXp / 5).toFixed(0) + " B";
     displayof_module_number_2.innerHTML = (maxXp / 4).toFixed(0) > 999 ? ((maxXp / 4) / 1000).toFixed(0) + " KB" : (maxXp / 4).toFixed(0) + " B";
@@ -99,35 +98,39 @@ function module(projects) {
 }
 
 async function loadPage() {
-    const data = await new Data().init();
+    const graph = await new Data().init();
     const profile = await new Profile().init();
-    console.log("data", data)
+    console.log("graph", graph)
     console.log("profile", profile)
 
-    displayof_module_graph.innerHTML = module(data.projects)
-    window.projects = data.projects
-    if (data.skills < 10) {
-        graph_display.innerTML = renderGraph(skills)
-    } else {
-        let d1 = data.skills.slice(0, Math.floor(data.skills.length / 2));
-        let d2 = data.skills.slice(Math.floor(data.skills.length / 2));
-        graph_display.innerHTML = renderGraph(d1) + renderGraph(d2)
+    if (graph) {
+        displayof_module_nodata.innerHTML = ""
+        displayof_module_time.innerHTML = `${graph.moduleStartAt.toLocaleDateString()} -> ${graph.moduleEndAt.toLocaleDateString()}`
+        displayof_module_graph.innerHTML = module(graph.projects)
+        if (graph.skills < 10) {
+            displayof_graph_display.innerHTML = renderGraph(skills)
+        } else {
+            let d1 = graph.skills.slice(0, Math.floor(graph.skills.length / 2));
+            let d2 = graph.skills.slice(Math.floor(graph.skills.length / 2));
+            displayof_graph_display.innerHTML = renderGraph(d1) + renderGraph(d2)
+        }
+        displayof_last_transactions.innerHTML = graph.renderTransactions()
+    }
+    if (profile) {
+
+        let total_audit = Number(profile.auditsSucceeded) + Number(profile.auditsFailed)
+
+        displayof_Name.innerHTML = profile.firstName + " " + profile.lastName || "Name";
+        displayof_Name.title = profile.login || "Name";
+        displayof_audit_ratio.innerHTML = profile.auditRatio.toFixed(2) || "audit_ratio";
+        displayof_audit_total.innerHTML = total_audit || "audit_total";
+        displayof_audit_successRate.innerHTML = ((profile.auditsSucceeded / total_audit) * 100).toFixed(1) + "%" || "audit_successRate";
+        displayof_audit_failRate.innerHTML = ((profile.auditsFailed / total_audit) * 100).toFixed(1) + "%" || "audit_failRate";
+        displayof_level.innerHTML = profile.level || "level";
     }
 
-    let total_audit = Number(profile.auditsSucceeded) + Number(profile.auditsFailed)
-
-    displayof_Name.innerHTML = profile.firstName + " " + profile.lastName || "Name";
-    displayof_Name.title = profile.login || "Name";
-    displayof_audit_ratio.innerHTML = profile.auditRatio.toFixed(2) || "audit_ratio";
-    displayof_audit_total.innerHTML = total_audit || "audit_total";
-    displayof_audit_successRate.innerHTML = ((profile.auditsSucceeded / total_audit) * 100).toFixed(1)+ "%" || "audit_successRate";
-    displayof_audit_failRate.innerHTML = ((profile.auditsFailed / total_audit) * 100).toFixed(1) + "%" || "audit_failRate";
-    displayof_level.innerHTML = profile.level || "level";
-
-    displayof_last_transactions.innerHTML = data.renderTransactions()
 };
 
-displayof_login.toggle = () => { displayof_login.style.display = displayof_login.style.display == "none" ? "" : "none" }
 const AUTH_URL = 'https://learn.zone01oujda.ma/api/auth/signin'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -151,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) {
                 console.log(res)
                 const resBody = await res.json();
-                throw new Error('Failed to log in\n'+(resBody.error||''));
+                throw new Error('Failed to log in\n' + (resBody.error || ''));
             }
 
             const token = await res.json();
@@ -164,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Save the token and handle successful login
             localStorage.setItem('token', token);
             loadPage();
-            displayof_login.toggle();
+            displayof_login.style.display = 'none';
 
         } catch (error) {
             alert(error.message);
@@ -172,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("logged in")
     });
     if (localStorage.getItem("token") !== null) {
-        displayof_login.toggle()
+        displayof_login.style.display = 'none';
         loadPage();
     }
 });
