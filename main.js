@@ -1,11 +1,32 @@
 import { Profile, Data } from "./graph.js";
 
-function logout() {
+export function logout() {
     localStorage.removeItem('token');
-    location.reload();
-}
 
-window.logout = logout
+    displayof_Name.innerHTML = "FirstName LastName";
+    displayof_Name.title = "NickName";
+    displayof_audit_ratio.innerHTML = 0;
+    displayof_audit_total.innerHTML = 0;
+    displayof_audit_successRate.innerHTML = '0 %';
+    displayof_audit_failRate.innerHTML = '0 %';
+    displayof_level.innerHTML = 0;
+
+    displayof_last_transactions.innerHTML = '';
+
+    displayof_module_time.innerHTML = '';
+    displayof_module_graph.innerHTML = '';
+    displayof_module_nodata.innerHTML = "No Data Yet";
+    displayof_graph_display.innerHTML = `<svg id="dispalyof_module" width="900" height="450" viewBox="0 0 900 450"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#333" />
+                <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="7em" fill="#888">
+                    No data yet
+                </text>
+            </svg>`;
+    document.querySelectorAll('[id^="displayof_module_number"]').forEach((e) => { e.innerHTML = '' });
+    displayof_login.style.display = '';
+    console.log("logged out")
+}
 
 function calcCoordinates(Nsides, radius) {
     const angle = Math.PI / (Nsides / 2);
@@ -41,7 +62,7 @@ function renderGraph(skills) {
 
     res += `<polygon id="skill-polygon" points="${points}" fill="var(--graphcolor)" stroke="#007bff" stroke-width="2" />\n` + last
     return `<svg id="skills-graph" width="400" height="400" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg">
-            <g transform="translate(1000,1000)" id="graph_display">${res}</g>
+            <g transform="translate(1000,1000)">${res}</g>
         </svg>`
 }
 
@@ -72,8 +93,8 @@ function module(projects) {
     displayof_module_number_1.innerHTML = (maxXp / 5).toFixed(0) > 999 ? ((maxXp / 5) / 1000).toFixed(0) + " KB" : (maxXp / 5).toFixed(0) + " B";
     displayof_module_number_2.innerHTML = (maxXp / 4).toFixed(0) > 999 ? ((maxXp / 4) / 1000).toFixed(0) + " KB" : (maxXp / 4).toFixed(0) + " B";
     displayof_module_number_3.innerHTML = (maxXp / 3).toFixed(0) > 999 ? ((maxXp / 3) / 1000).toFixed(0) + " KB" : (maxXp / 3).toFixed(0) + " B";
-    displayof_module_number_5.innerHTML = (maxXp / 1).toFixed(0) > 999 ? ((maxXp / 1) / 1000).toFixed(0) + " KB" : (maxXp / 1).toFixed(0) + " B";
     displayof_module_number_4.innerHTML = (maxXp / 2).toFixed(0) > 999 ? ((maxXp / 2) / 1000).toFixed(0) + " KB" : (maxXp / 2).toFixed(0) + " B";
+    displayof_module_number_5.innerHTML = (maxXp / 1).toFixed(0) > 999 ? ((maxXp / 1) / 1000).toFixed(0) + " KB" : (maxXp / 1).toFixed(0) + " B";
     return res + last
 }
 

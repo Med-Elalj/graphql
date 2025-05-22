@@ -1,7 +1,11 @@
+import { logout } from "./main.js";
 
 const GRAPHQL_URL = 'https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql'
 
 async function fetchGraphQL(query, variables) {
+  if (!localStorage.getItem("token")) {
+    throw new Error("no token")
+  }
   const response = await fetch(GRAPHQL_URL, {
     method: 'POST',
     headers: {
@@ -13,8 +17,9 @@ async function fetchGraphQL(query, variables) {
       variables: variables,
     }),
   });
+
   if (!response.ok) {
-    window.logout()
+    throw new Error('response not ok')
   }
 
   return await response.json();
@@ -65,10 +70,10 @@ export class Profile {
       } else {
         throw new Error("Invalid data received!");
       }
+      return this
     } catch (error) {
       console.error(error);
-    } finally {
-      return this
+      logout()
     }
   }
 }
@@ -114,11 +119,11 @@ export class Data {
       } else {
         throw new Error("Invalid projects data received!");
       }
-
+      return this
     } catch (error) {
       console.error("An error occurred during initialization:", error);
+      logout()
     }
-    return this
   }
   renderTransactions() {
     if (!Array.isArray(this.transactions)) {
